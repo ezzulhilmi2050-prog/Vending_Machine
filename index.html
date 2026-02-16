@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VEND_OS // COMMAND CENTER</title>
+  <title>VEND_OS // PRO</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
 
@@ -13,348 +13,328 @@
 
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            deep: '#050505',
-            panel: '#101012',
-            cyan: { 400: '#00f2ff', 500: '#00d0db', 900: '#004d57' },
-            neonRed: '#ff0055',
-            neonGreen: '#00ff9d'
-          },
-          fontFamily: {
-            mono: ['"JetBrains Mono"', 'monospace'],
-            sans: ['"Rajdhani"', 'sans-serif']
-          }
-        }
-      }
-    }
-  </script>
-
   <style>
-    /* FONTS */
-    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Rajdhani:wght@500;700&display=swap');
-
-    body { font-family: 'Rajdhani', sans-serif; background-color: #050505; color: #e0e0e0; overflow-x: hidden; }
-
-    /* GLASSMORPHISM */
-    .glass {
-      background: rgba(20, 20, 25, 0.6);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+    /* IPHONE-LIKE AESTHETIC */
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #000;
+      color: #f5f5f7;
+      overflow-x: hidden;
     }
 
-    /* NEON GLOWS */
-    .glow-text { text-shadow: 0 0 10px rgba(0, 242, 255, 0.5); }
-    .glow-border { box-shadow: 0 0 15px rgba(0, 242, 255, 0.15); border-color: rgba(0, 242, 255, 0.4); }
+    /* APPLE GLASSMORPHISM */
+    .glass-panel {
+      background: rgba(30, 30, 30, 0.65);
+      backdrop-filter: blur(25px) saturate(180%);
+      -webkit-backdrop-filter: blur(25px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
 
-    .glow-green { text-shadow: 0 0 12px rgba(0, 255, 157, 0.6); color: #00ff9d; }
-    .glow-red { text-shadow: 0 0 12px rgba(255, 0, 85, 0.6); color: #ff0055; }
+    .glass-button {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.2s ease;
+    }
+    .glass-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
+    }
+
+    /* TEXT UTILS */
+    .text-ios-gray { color: #86868b; }
+    .text-ios-blue { color: #2997ff; }
+    .text-ios-green { color: #30d158; }
+    .text-ios-red { color: #ff453a; }
+
+    /* INPUTS */
+    .ios-input {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: white;
+      border-radius: 8px;
+      transition: border-color 0.2s;
+    }
+    .ios-input:focus {
+      outline: none;
+      border-color: #2997ff;
+    }
 
     /* SCROLLBAR */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #050505; }
-    ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: #00f2ff; }
-
-    /* ANIMATION UTILS */
-    .fade-enter-active, .fade-leave-active { transition: opacity 0.3s ease; }
-    .fade-enter-from, .fade-leave-to { opacity: 0; }
+    ::-webkit-scrollbar { width: 0px; background: transparent; } /* Hidden scrollbar like iOS */
   </style>
 </head>
-<body class="bg-[url('https://images.unsplash.com/photo-1518544806308-c8f325cc59bf?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-fixed bg-center">
+<body class="bg-[url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop')] bg-cover bg-fixed bg-center">
 
-<div class="fixed inset-0 bg-deep/90 z-[-1]"></div>
+<div class="fixed inset-0 bg-black/60 z-[-1]"></div>
 
-<div id="app" class="min-h-screen flex flex-col relative">
+<div id="app" class="min-h-screen flex flex-col items-center justify-center relative p-4">
 
   <transition name="fade">
-    <div v-if="notification" class="fixed top-6 right-6 z-[100] glass border-l-4 border-cyan-400 p-4 rounded-lg flex items-center gap-4 shadow-2xl">
-      <i class="ph-fill ph-check-circle text-cyan-400 text-2xl"></i>
-      <div>
-        <h4 class="font-bold text-white tracking-widest text-sm">SYSTEM UPDATE</h4>
-        <p class="text-xs text-gray-300 font-mono">{{ notification }}</p>
-      </div>
+    <div v-if="notification" class="fixed top-6 z-[100] glass-panel px-6 py-3 rounded-full flex items-center gap-3 shadow-2xl animate-bounce">
+      <i class="ph-fill ph-check-circle text-ios-green text-xl"></i>
+      <span class="text-sm font-medium tracking-wide">{{ notification }}</span>
     </div>
   </transition>
 
-  <div v-if="view === 'login'" class="flex-grow flex items-center justify-center p-4">
-    <div class="glass p-10 rounded-2xl max-w-md w-full text-center glow-border relative overflow-hidden">
-      <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
+  <div v-if="view === 'login'" class="w-full max-w-sm">
+    <div class="glass-panel p-8 rounded-[30px] text-center">
+      <div class="h-16 w-16 bg-white/10 rounded-2xl mx-auto flex items-center justify-center mb-6">
+        <i class="ph-fill ph-lock-key text-3xl text-white"></i>
+      </div>
 
-      <h1 class="text-5xl font-bold text-white mb-2 tracking-widest glow-text">VEND_OS</h1>
-      <p class="text-cyan-400/70 mb-10 font-mono text-xs tracking-[0.3em]">SECURE FLEET MANAGEMENT</p>
+      <h1 class="text-3xl font-semibold text-white mb-2">Welcome Back</h1>
+      <p class="text-ios-gray text-sm mb-8">Enter your ID to access the fleet.</p>
 
-      <input v-model="loginName" @keyup.enter="login" type="text" placeholder="ENTER OPERATOR ID"
-             class="w-full bg-black/50 border border-gray-700 text-center text-white text-lg p-4 rounded-lg focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_20px_rgba(0,242,255,0.3)] transition-all font-mono tracking-wider placeholder-gray-600 mb-6">
+      <input v-model="loginName" @keyup.enter="login" type="text" placeholder="Operator ID"
+             class="w-full ios-input p-4 text-center text-lg mb-4 placeholder-gray-500">
 
-      <button @click="login" class="w-full bg-cyan-900/30 hover:bg-cyan-400/20 text-cyan-400 border border-cyan-500/50 py-3 rounded-lg font-bold tracking-widest transition-all hover:glow-border">
-        INITIALIZE LINK
+      <button @click="login" class="w-full bg-[#2997ff] hover:bg-[#007aff] text-white py-4 rounded-xl font-medium transition-colors">
+        Unlock System
       </button>
     </div>
   </div>
 
 
-  <div v-else class="flex-grow flex flex-col p-4 md:p-8 max-w-[1600px] mx-auto w-full gap-6">
+  <div v-else class="w-full max-w-[1400px] h-[90vh] flex flex-col gap-6">
 
-    <div class="glass p-5 rounded-xl flex flex-col md:flex-row justify-between items-center gap-4">
-      <div class="flex items-center gap-4 w-full md:w-auto">
-        <div class="h-12 w-12 bg-cyan-400/10 rounded-lg flex items-center justify-center border border-cyan-400/30 text-cyan-400">
-          <i class="ph-bold ph-squares-four text-2xl"></i>
-        </div>
+    <div class="glass-panel px-6 py-4 rounded-[24px] flex justify-between items-center">
+      <div class="flex items-center gap-4">
+        <div class="h-10 w-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xs">OS</div>
         <div>
-          <h2 class="text-xl font-bold text-white tracking-wide">COMMAND CENTER</h2>
-          <div class="flex items-center gap-2 text-xs font-mono">
-            <span class="text-gray-400">OP:</span> <span class="text-white font-bold uppercase">{{ user }}</span>
-            <span class="text-gray-600">|</span>
-            <span :class="isGodMode ? 'glow-red font-bold' : 'text-gray-500'">{{ isGodMode ? 'GOD MODE ACTIVE' : 'VIEWER MODE' }}</span>
-          </div>
+          <h2 class="text-lg font-semibold leading-none">Control Center</h2>
+          <p class="text-xs text-ios-gray mt-1">{{ user }} <span v-if="isGodMode" class="text-ios-blue font-bold ml-1">• God Mode</span></p>
         </div>
       </div>
 
       <div class="flex gap-3">
-        <button v-if="isGodMode" @click="showGlobalProducts = true" class="px-5 py-2 glass rounded-lg border border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/10 text-sm font-bold flex items-center gap-2 transition-all">
-          <i class="ph-bold ph-package"></i> GLOBAL CATALOG
+        <button v-if="isGodMode" @click="showCatalog = true" class="glass-button px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2">
+          <i class="ph-bold ph-package"></i> Products
         </button>
-        <button @click="logout" class="px-5 py-2 glass rounded-lg border border-red-500/30 text-red-400 hover:bg-red-500/10 text-sm font-bold">
-          LOGOUT
+        <button @click="logout" class="glass-button px-4 py-2 rounded-lg text-sm font-medium text-ios-red hover:bg-red-500/10">
+          Exit
         </button>
       </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 h-full overflow-hidden">
 
-      <div class="lg:col-span-2 overflow-y-auto pr-1">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="lg:col-span-8 overflow-y-auto pb-20 no-scrollbar">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
           <div v-for="machine in machines" :key="machine.id" @click="openMachine(machine)"
-               class="glass p-0 rounded-xl cursor-pointer hover:border-cyan-400/50 transition-all group relative overflow-hidden h-[220px] flex flex-col">
+               class="glass-panel p-0 rounded-[24px] cursor-pointer hover:bg-white/5 transition-all group relative overflow-hidden aspect-[4/5] flex flex-col">
 
-            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105 opacity-40 group-hover:opacity-20"
-                 :style="{ backgroundImage: `url(${machine.image || 'https://images.unsplash.com/photo-1605218427306-635ba2439af2?q=80&w=2070'})` }">
+            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105 opacity-50 group-hover:opacity-30"
+                 :style="{ backgroundImage: `url(${machine.image || 'https://images.unsplash.com/photo-1605218427306-635ba2439af2?q=80'})` }">
             </div>
-            <div class="absolute inset-0 bg-gradient-to-t from-deep via-deep/80 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
 
-            <div class="relative z-10 p-5 flex flex-col h-full justify-between">
-              <div class="flex justify-between items-start">
-                <div class="bg-black/50 backdrop-blur px-3 py-1 rounded text-[10px] font-mono border border-gray-700 text-cyan-400">
-                  {{ machine.location || 'UNKNOWN SECTOR' }}
-                </div>
-                <div class="h-2 w-2 rounded-full bg-green-500 shadow-[0_0_10px_#22c55e] animate-pulse"></div>
+            <div class="relative z-10 p-5 flex flex-col h-full justify-end">
+              <div class="mb-auto flex justify-between">
+                                    <span class="bg-black/40 backdrop-blur px-2 py-1 rounded-md text-[10px] font-bold text-white border border-white/10">
+                                        {{ machine.location || 'Unknown' }}
+                                    </span>
+                <div class="h-2 w-2 rounded-full bg-[#30d158] shadow-[0_0_8px_#30d158]"></div>
               </div>
 
-              <div>
-                <h3 class="text-2xl font-bold text-white mb-1 group-hover:glow-text transition-all">{{ machine.name }}</h3>
-                <p class="text-xs text-gray-400 font-mono mb-4">ID: {{ machine.id }}</p>
+              <h3 class="text-xl font-bold text-white mb-1">{{ machine.name }}</h3>
+              <p class="text-xs text-gray-300 mb-4 opacity-80">{{ machine.id }}</p>
 
-                <div class="flex gap-4 border-t border-gray-800 pt-3">
-                  <div>
-                    <span class="text-[10px] text-gray-500 block">REVENUE</span>
-                    <span class="text-sm font-bold text-white">RM{{ getMachineRevenue(machine) }}</span>
-                  </div>
-                  <div>
-                    <span class="text-[10px] text-gray-500 block">PROFIT</span>
-                    <span :class="getMachineProfit(machine) >= 0 ? 'text-green-400' : 'text-red-400'" class="text-sm font-bold">
-                                                RM{{ getMachineProfit(machine) }}
-                                            </span>
-                  </div>
+              <div class="grid grid-cols-2 gap-2">
+                <div class="bg-white/10 backdrop-blur rounded-lg p-2">
+                  <p class="text-[10px] text-gray-400 uppercase">Revenue</p>
+                  <p class="text-sm font-bold text-white">RM{{ getMachineRevenue(machine) }}</p>
+                </div>
+                <div class="bg-white/10 backdrop-blur rounded-lg p-2">
+                  <p class="text-[10px] text-gray-400 uppercase">Profit</p>
+                  <p :class="getMachineProfit(machine) >= 0 ? 'text-ios-green' : 'text-ios-red'" class="text-sm font-bold">
+                    RM{{ getMachineProfit(machine) }}
+                  </p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div v-if="isGodMode" @click="createNewMachine"
-               class="border-2 border-dashed border-gray-800 hover:border-cyan-500/50 hover:bg-cyan-900/10 rounded-xl flex flex-col items-center justify-center cursor-pointer transition-all h-[220px] group text-gray-600 hover:text-cyan-400">
-            <i class="ph-thin ph-plus text-5xl mb-2 group-hover:scale-110 transition-transform"></i>
-            <span class="font-bold tracking-widest text-sm">DEPLOY NEW UNIT</span>
+          <div v-if="isGodMode" @click="addMachine"
+               class="border border-dashed border-white/20 rounded-[24px] flex flex-col items-center justify-center cursor-pointer hover:border-white/40 hover:bg-white/5 transition-all min-h-[300px] text-gray-500 hover:text-white">
+            <i class="ph-light ph-plus text-5xl mb-2"></i>
+            <span class="font-medium text-sm">Add Device</span>
           </div>
 
         </div>
       </div>
 
-      <div class="flex flex-col gap-6">
-        <div class="glass p-6 rounded-xl flex flex-col h-[300px]">
-          <h3 class="text-xs font-bold text-gray-400 tracking-widest mb-4">MONTHLY REVENUE ANALYTICS</h3>
+      <div class="lg:col-span-4 flex flex-col gap-6">
+        <div class="glass-panel p-6 rounded-[24px] flex flex-col h-[320px]">
+          <h3 class="text-xs font-bold text-ios-gray uppercase tracking-widest mb-4">Performance</h3>
           <div class="flex-grow relative w-full h-full">
             <canvas id="mainChart"></canvas>
           </div>
         </div>
 
-        <div class="glass p-6 rounded-xl border-t-4 border-green-500 relative overflow-hidden">
-          <div class="absolute -right-10 -bottom-10 opacity-10 text-green-500">
-            <i class="ph-fill ph-money text-9xl"></i>
+        <div class="glass-panel p-6 rounded-[24px] bg-gradient-to-br from-green-900/40 to-black border-none relative overflow-hidden">
+          <div class="absolute right-0 top-0 p-6 opacity-20">
+            <i class="ph-duotone ph-trend-up text-6xl text-green-500"></i>
           </div>
-          <p class="text-gray-400 text-xs font-mono tracking-widest mb-2">NET FLEET PROFIT</p>
-          <h2 class="text-5xl font-bold text-white mb-2 glow-green">RM{{ totalFleetProfit }}</h2>
-          <div class="flex gap-6 mt-4 text-xs font-mono">
-            <span class="text-red-400">COST: -RM{{ totalFleetCost }}</span>
-            <span class="text-cyan-400">GROSS: RM{{ totalFleetRevenue }}</span>
+          <p class="text-ios-gray text-xs font-bold uppercase tracking-widest mb-1">Net Profit</p>
+          <h2 class="text-4xl font-bold text-white mb-4">RM{{ totalFleetProfit }}</h2>
+
+          <div class="space-y-2 text-sm font-medium">
+            <div class="flex justify-between">
+              <span class="text-gray-400">Total Revenue</span>
+              <span class="text-white">RM{{ totalFleetRevenue }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-400">Total Auto-Cost</span>
+              <span class="text-ios-red">-RM{{ totalFleetCost }}</span>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <transition name="fade">
-    <div v-if="activeMachine" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm" @click.self="closeMachine">
-      <div class="glass w-full max-w-5xl h-[90vh] rounded-2xl flex overflow-hidden border border-gray-700 shadow-[0_0_50px_rgba(0,0,0,0.8)] relative">
 
-        <button @click="closeMachine" class="absolute top-4 right-4 z-20 p-2 bg-black/60 hover:bg-red-500 text-white rounded-full transition-all">
+  <transition name="fade">
+    <div v-if="activeMachine" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md" @click.self="activeMachine = null">
+      <div class="glass-panel w-full max-w-6xl h-[90vh] rounded-[32px] flex overflow-hidden shadow-2xl relative">
+
+        <button @click="activeMachine = null" class="absolute top-6 right-6 z-20 h-8 w-8 bg-black/50 rounded-full flex items-center justify-center hover:bg-white/20 transition-all text-white">
           <i class="ph-bold ph-x"></i>
         </button>
 
-        <div class="w-1/3 bg-panel border-r border-gray-800 p-6 flex flex-col relative">
-
-          <div class="aspect-square rounded-xl bg-gray-900 border border-gray-800 mb-6 relative group overflow-hidden">
-            <img :src="activeMachine.image || 'https://images.unsplash.com/photo-1605218427306-635ba2439af2?q=80'" class="w-full h-full object-cover opacity-60">
-            <div v-if="isGodMode" class="absolute inset-0 bg-black/80 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity p-4">
-              <label class="text-[10px] text-gray-400 font-mono mb-1">IMAGE URL</label>
-              <input v-model="activeMachine.image" class="w-full bg-black border border-gray-700 text-xs text-white p-2 rounded mb-2">
-              <label class="text-[10px] text-gray-400 font-mono mb-1">LOCATION NAME</label>
-              <input v-model="activeMachine.location" class="w-full bg-black border border-gray-700 text-xs text-white p-2 rounded">
+        <div class="w-1/3 bg-black/20 border-r border-white/10 p-8 flex flex-col relative">
+          <div class="aspect-[4/5] rounded-2xl bg-gray-900 relative overflow-hidden group mb-6 shadow-lg border border-white/10">
+            <img :src="activeMachine.image || 'https://images.unsplash.com/photo-1605218427306-635ba2439af2?q=80'" class="w-full h-full object-cover">
+            <div v-if="isGodMode" class="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all p-4">
+              <span class="text-xs text-gray-400 mb-2 font-bold">CHANGE COVER</span>
+              <input v-model="activeMachine.image" placeholder="Paste Image URL" class="w-full ios-input text-xs p-2 text-center mb-2">
+              <input v-model="activeMachine.location" placeholder="Location Name" class="w-full ios-input text-xs p-2 text-center">
             </div>
           </div>
 
-          <h2 class="text-3xl font-bold text-white mb-1">{{ activeMachine.name }}</h2>
-          <input v-if="isGodMode" v-model="activeMachine.name" class="bg-transparent border-b border-gray-700 text-gray-500 text-xs mb-6 focus:border-cyan-400 focus:outline-none w-full" placeholder="Rename Machine...">
+          <h2 class="text-3xl font-bold text-white">{{ activeMachine.name }}</h2>
+          <input v-if="isGodMode" v-model="activeMachine.name" class="bg-transparent text-gray-500 text-sm mb-6 focus:text-white outline-none" placeholder="Rename Device...">
 
-          <div class="mt-auto bg-black/40 border border-gray-800 rounded-lg p-4 font-mono text-sm">
-            <div class="flex justify-between text-gray-400 mb-2">
-              <span>TOTAL SALES</span>
-              <span class="text-white">RM{{ getMachineRevenue(activeMachine) }}</span>
+          <div class="mt-auto bg-white/5 rounded-xl p-5 border border-white/5 space-y-3">
+            <div class="flex justify-between text-sm text-gray-400">
+              <span>Sales Revenue</span>
+              <span class="text-white font-medium">RM{{ getMachineRevenue(activeMachine) }}</span>
             </div>
-            <div class="flex justify-between text-red-400 mb-2">
-              <span>TOTAL RESTOCK COST</span>
-              <span>-RM{{ getMachineCost(activeMachine) }}</span>
+            <div class="flex justify-between text-sm text-gray-400">
+              <span>Auto-Calculated Cost</span>
+              <span class="text-ios-red font-medium">-RM{{ getMachineCost(activeMachine) }}</span>
             </div>
-            <div class="h-px bg-gray-700 my-2"></div>
+            <div class="h-px bg-white/10"></div>
             <div class="flex justify-between items-center">
-              <span class="text-gray-400">CLEAN PROFIT</span>
-              <span :class="getMachineProfit(activeMachine) >= 0 ? 'glow-green' : 'glow-red'" class="text-xl font-bold">
-                                    RM{{ getMachineProfit(activeMachine) }}
-                                </span>
+              <span class="text-sm font-bold text-gray-300">NET PROFIT</span>
+              <span class="text-2xl font-bold text-ios-green">RM{{ getMachineProfit(activeMachine) }}</span>
             </div>
           </div>
 
-          <button v-if="isGodMode" @click="deleteMachine" class="mt-4 text-xs text-red-900 hover:text-red-500 flex items-center justify-center gap-2 py-2">
-            <i class="ph-bold ph-trash"></i> DECOMMISSION UNIT
-          </button>
+          <button v-if="isGodMode" @click="deleteMachine" class="mt-4 text-xs text-ios-red text-center hover:underline">Decommission Unit</button>
         </div>
 
-        <div class="w-2/3 bg-black/20 p-8 overflow-y-auto">
+        <div class="w-2/3 p-8 overflow-y-auto bg-gradient-to-br from-gray-900/50 to-black/50">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-bold text-white">Live Inventory</h3>
 
-          <div class="flex justify-between items-center mb-8">
-            <h3 class="text-xl font-bold text-white flex items-center gap-3">
-              <i class="ph-duotone ph-list-dashes"></i> LIVE INVENTORY
-            </h3>
-            <div v-if="isGodMode" class="flex items-center gap-2">
-              <span class="text-xs text-gray-500 font-mono">ADD RESTOCK COST:</span>
-              <div class="relative">
-                <span class="absolute left-2 top-1.5 text-gray-500 text-xs">RM</span>
-                <input type="number" v-model.number="tempRestockCost" class="w-20 bg-black/50 border border-red-900/50 text-red-400 text-xs p-1.5 pl-6 rounded focus:border-red-500 outline-none">
-              </div>
-              <button @click="addCost" class="bg-red-900/30 hover:bg-red-500 text-red-400 hover:text-white px-3 py-1.5 rounded text-xs font-bold transition-all">
-                SAVE COST
+            <div v-if="isGodMode" class="flex items-center gap-2 bg-white/5 p-1 rounded-lg border border-white/10">
+              <select v-model="selectedProduct" class="bg-transparent text-white text-xs p-2 outline-none w-48">
+                <option :value="null">Select Product to Load...</option>
+                <option v-for="p in globalCatalog" :value="p">{{ p.name }} (Cost: RM{{ p.buyPrice }})</option>
+              </select>
+              <button @click="addProductSlot" class="bg-white/10 hover:bg-white/20 p-2 rounded-md text-ios-green">
+                <i class="ph-bold ph-plus"></i>
               </button>
             </div>
           </div>
 
-          <div v-if="isGodMode" class="mb-6 bg-cyan-900/10 border border-cyan-900/30 p-3 rounded-lg flex gap-2 items-center">
-            <select v-model="selectedGlobalProduct" class="bg-black border border-gray-700 text-white text-xs p-2 rounded flex-grow">
-              <option :value="null">Select from Global Catalog...</option>
-              <option v-for="prod in globalProducts" :value="prod">{{ prod.name }} (Buy: RM{{prod.buyPrice}})</option>
-            </select>
-            <button @click="addProductToMachine" class="bg-cyan-600 text-black px-4 py-2 rounded text-xs font-bold hover:bg-cyan-500">
-              ADD SLOT
-            </button>
-          </div>
+          <div class="space-y-4">
+            <div v-for="(item, idx) in activeMachine.inventory" :key="idx"
+                 class="bg-white/5 border border-white/5 p-4 rounded-2xl flex items-center gap-5 hover:bg-white/10 transition-all group">
 
-          <div class="space-y-3">
-            <div v-for="(slot, index) in activeMachine.inventory" :key="index"
-                 class="bg-panel border border-gray-800 p-3 rounded-lg flex items-center gap-4 hover:border-gray-600 transition-all">
-
-              <div class="h-12 w-12 bg-gray-800 rounded flex items-center justify-center text-2xl text-gray-500">
-                <i class="ph-duotone ph-can"></i>
+              <div class="h-16 w-16 bg-white/5 rounded-xl overflow-hidden shrink-0 border border-white/10">
+                <img :src="item.image || 'https://via.placeholder.com/100'" class="w-full h-full object-cover">
               </div>
 
               <div class="flex-grow">
                 <div class="flex justify-between mb-1">
-                  <h4 class="font-bold text-white text-sm">{{ slot.name }}</h4>
-                  <span class="text-xs font-mono text-cyan-400">Sell: RM{{ slot.sellPrice }}</span>
+                  <h4 class="font-bold text-white">{{ item.name }}</h4>
+                  <div class="text-xs text-gray-400">
+                    Cost: <span class="text-gray-300">RM{{ item.buyPrice }}</span> |
+                    Sell: <span v-if="!isGodMode" class="text-ios-blue">RM{{ item.sellPrice }}</span>
+                    <input v-else type="number" v-model="item.sellPrice" class="w-16 bg-black/50 border border-gray-600 rounded px-1 text-ios-blue text-center">
+                  </div>
                 </div>
 
-                <div class="w-full h-1.5 bg-gray-800 rounded-full overflow-hidden">
-                  <div class="h-full bg-cyan-500 transition-all duration-500" :style="{ width: (slot.stock / 50) * 100 + '%' }"></div>
-                </div>
-                <div class="flex justify-between mt-1">
-                  <span class="text-[10px] text-gray-500">Left: {{ slot.stock }} units</span>
-                  <span class="text-[10px] text-gray-500">Sold: {{ slot.sold }} units</span>
+                <div class="w-full h-1.5 bg-white/10 rounded-full overflow-hidden mt-2">
+                  <div class="h-full bg-[#2997ff]" :style="{ width: (item.stock / 50) * 100 + '%' }"></div>
                 </div>
               </div>
 
-              <div v-if="isGodMode" class="flex flex-col gap-1 items-end border-l border-gray-800 pl-4 min-w-[120px]">
-                <div class="flex items-center gap-1 mb-1">
-                  <label class="text-[8px] text-gray-500">SOLD:</label>
-                  <input type="number" v-model.number="slot.sold" class="w-12 bg-black text-white text-xs p-1 border border-gray-700 rounded text-center">
+              <div v-if="isGodMode" class="flex flex-col items-end gap-2 min-w-[120px]">
+                <div class="flex items-center gap-2">
+                  <label class="text-[10px] font-bold text-gray-500 uppercase">Sold Qty</label>
+                  <input type="number" v-model="item.sold" class="w-14 ios-input text-center text-sm p-1 text-white border-white/20 focus:border-ios-green">
                 </div>
-                <div class="flex items-center gap-1">
-                  <label class="text-[8px] text-gray-500">PRICE:</label>
-                  <input type="number" v-model.number="slot.sellPrice" class="w-12 bg-black text-cyan-400 text-xs p-1 border border-gray-700 rounded text-center">
-                </div>
-                <button @click="removeSlot(index)" class="text-[10px] text-red-500 hover:text-white mt-1">REMOVE</button>
+                <button @click="removeSlot(idx)" class="text-[10px] text-ios-red hover:underline">Remove</button>
               </div>
 
+              <div v-else class="text-right">
+                <p class="text-2xl font-bold text-white">{{ item.sold }}</p>
+                <p class="text-[10px] text-gray-500 uppercase">Sold Today</p>
+              </div>
             </div>
 
-            <div v-if="activeMachine.inventory.length === 0" class="text-center py-10 text-gray-600 italic text-sm">
-              This unit is empty. Use God Mode to add products.
+            <div v-if="activeMachine.inventory.length === 0" class="text-center py-12 text-gray-500 text-sm">
+              This machine is empty. Login as Admin to load products.
             </div>
           </div>
-
         </div>
       </div>
     </div>
   </transition>
 
   <transition name="fade">
-    <div v-if="showGlobalProducts" class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md" @click.self="showGlobalProducts = false">
-      <div class="glass w-full max-w-2xl p-6 rounded-xl border border-yellow-600/30 shadow-2xl">
-        <h2 class="text-xl font-bold text-yellow-500 mb-4 flex items-center gap-2">
-          <i class="ph-fill ph-database"></i> GLOBAL PRODUCT CATALOG
-        </h2>
+    <div v-if="showCatalog" class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md" @click.self="showCatalog = false">
+      <div class="glass-panel w-full max-w-3xl p-8 rounded-[32px] relative">
+        <h2 class="text-2xl font-bold text-white mb-6">Global Product Database</h2>
 
-        <div class="flex gap-2 mb-6 p-4 bg-yellow-900/10 rounded-lg border border-yellow-900/30">
-          <input v-model="newProdName" placeholder="Product Name (e.g. Cola)" class="bg-black border border-gray-700 text-white p-2 rounded flex-grow text-sm">
-          <input v-model.number="newProdBuy" placeholder="Buy Cost (RM)" type="number" class="bg-black border border-gray-700 text-white p-2 rounded w-24 text-sm">
-          <input v-model.number="newProdSell" placeholder="Sell Price (RM)" type="number" class="bg-black border border-gray-700 text-white p-2 rounded w-24 text-sm">
-          <button @click="addGlobalProduct" class="bg-yellow-600 text-black font-bold px-4 rounded hover:bg-yellow-500 text-sm">ADD</button>
+        <div class="grid grid-cols-12 gap-2 mb-6 p-4 bg-white/5 rounded-2xl border border-white/10">
+          <div class="col-span-3">
+            <input v-model="newProd.name" placeholder="Name" class="w-full ios-input p-2 text-sm">
+          </div>
+          <div class="col-span-4">
+            <input v-model="newProd.image" placeholder="Image URL (http...)" class="w-full ios-input p-2 text-sm">
+          </div>
+          <div class="col-span-2">
+            <input v-model.number="newProd.buy" placeholder="Cost" type="number" class="w-full ios-input p-2 text-sm">
+          </div>
+          <div class="col-span-2">
+            <input v-model.number="newProd.sell" placeholder="Sell" type="number" class="w-full ios-input p-2 text-sm">
+          </div>
+          <div class="col-span-1">
+            <button @click="addToCatalog" class="w-full h-full bg-white text-black rounded-lg hover:bg-gray-200 flex items-center justify-center">
+              <i class="ph-bold ph-plus"></i>
+            </button>
+          </div>
         </div>
 
-        <div class="h-64 overflow-y-auto border border-gray-800 rounded">
-          <table class="w-full text-sm text-left text-gray-300">
-            <thead class="bg-gray-800 text-gray-500 font-mono text-xs sticky top-0">
-            <tr>
-              <th class="p-2">Name</th>
-              <th class="p-2 text-right">My Cost</th>
-              <th class="p-2 text-right">Default Sell</th>
-              <th class="p-2 text-right">Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="(prod, idx) in globalProducts" class="border-b border-gray-800 hover:bg-white/5">
-              <td class="p-2">{{ prod.name }}</td>
-              <td class="p-2 text-right font-mono text-red-400">RM{{ prod.buyPrice }}</td>
-              <td class="p-2 text-right font-mono text-cyan-400">RM{{ prod.sellPrice }}</td>
-              <td class="p-2 text-right">
-                <button @click="removeGlobalProduct(idx)" class="text-red-500 hover:text-red-400"><i class="ph-bold ph-trash"></i></button>
-              </td>
-            </tr>
-            </tbody>
-          </table>
+        <div class="max-h-[400px] overflow-y-auto pr-2 space-y-2">
+          <div v-for="(p, idx) in globalCatalog" class="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 border border-transparent hover:border-white/10">
+            <img :src="p.image || 'https://via.placeholder.com/50'" class="h-10 w-10 rounded-lg object-cover bg-white/10">
+            <div class="flex-grow">
+              <h4 class="font-bold text-white text-sm">{{ p.name }}</h4>
+            </div>
+            <div class="text-xs text-gray-400 font-mono">
+              Buy: <span class="text-ios-red">RM{{ p.buyPrice }}</span> |
+              Sell: <span class="text-ios-green">RM{{ p.sellPrice }}</span>
+            </div>
+            <button @click="globalCatalog.splice(idx, 1)" class="text-gray-600 hover:text-red-500 px-2"><i class="ph-bold ph-trash"></i></button>
+          </div>
         </div>
       </div>
     </div>
@@ -368,33 +348,31 @@
   createApp({
     data() {
       return {
-        view: 'login', // login, dashboard
+        view: 'login',
         loginName: '',
         user: 'Guest',
         isGodMode: false,
         notification: null,
-        showGlobalProducts: false,
+
+        showCatalog: false,
         activeMachine: null,
+        selectedProduct: null,
 
-        // Temp inputs
-        tempRestockCost: null,
-        selectedGlobalProduct: null,
-        newProdName: '', newProdBuy: null, newProdSell: null,
+        newProd: { name: '', image: '', buy: null, sell: null },
 
-        // Data Storage
-        globalProducts: [
-          { name: 'Quantum Cola', buyPrice: 1.50, sellPrice: 3.00 },
-          { name: 'Neon Chips', buyPrice: 2.00, sellPrice: 4.50 },
-          { name: 'Hydro Water', buyPrice: 0.80, sellPrice: 1.50 }
+        // DATA
+        globalCatalog: [
+          { name: 'Cola Zero', buyPrice: 1.50, sellPrice: 3.00, image: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?q=80&w=200&auto=format&fit=crop' },
+          { name: 'Mineral Water', buyPrice: 0.60, sellPrice: 1.20, image: 'https://images.unsplash.com/photo-1616118132534-381148898bb4?q=80&w=200&auto=format&fit=crop' },
+          { name: 'Choco Bar', buyPrice: 2.00, sellPrice: 4.50, image: 'https://images.unsplash.com/photo-1629668266299-b1d530009c91?q=80&w=200&auto=format&fit=crop' }
         ],
         machines: [
           {
-            id: 'UNIT-01',
-            name: 'Lobby Station',
-            location: 'MAIN ENTRANCE',
+            id: 'VM-001',
+            name: 'Lobby Unit',
+            location: 'Entrance A',
             image: '',
-            inventory: [],
-            manualCosts: [] // Stores history of restock costs
+            inventory: [] // Items { name, buyPrice, sellPrice, sold, image, stock }
           }
         ]
       }
@@ -411,19 +389,19 @@
       }
     },
     mounted() {
-      // Load Data
-      const saved = localStorage.getItem('VEND_OS_DATA');
+      // LOAD DATA
+      const saved = localStorage.getItem('VEND_OS_PRO');
       if (saved) {
         const parsed = JSON.parse(saved);
         this.machines = parsed.machines;
-        this.globalProducts = parsed.globalProducts || this.globalProducts;
+        this.globalCatalog = parsed.catalog || this.globalCatalog;
       }
 
-      // Auto-save watcher
-      this.$watch(() => [this.machines, this.globalProducts], () => {
-        localStorage.setItem('VEND_OS_DATA', JSON.stringify({
+      // AUTO SAVE
+      this.$watch(() => [this.machines, this.globalCatalog], () => {
+        localStorage.setItem('VEND_OS_PRO', JSON.stringify({
           machines: this.machines,
-          globalProducts: this.globalProducts
+          catalog: this.globalCatalog
         }));
       }, { deep: true });
     },
@@ -433,7 +411,7 @@
         if(this.loginName === 'ezzulhilmi') {
           this.user = 'Ezzul Hilmi';
           this.isGodMode = true;
-          this.notify('GOD MODE: AUTHORIZED');
+          this.notify('Access Granted: Administrator');
         } else {
           this.user = this.loginName;
           this.isGodMode = false;
@@ -451,73 +429,67 @@
         setTimeout(() => this.notification = null, 3000);
       },
 
-      // Machine Logic
-      createNewMachine() {
+      // Machine Ops
+      addMachine() {
         this.machines.push({
-          id: `UNIT-0${this.machines.length + 1}`,
-          name: 'New Unit',
-          location: 'UNASSIGNED',
+          id: `VM-0${this.machines.length + 1}`,
+          name: 'New Machine',
+          location: 'Unassigned',
           image: '',
-          inventory: [],
-          manualCosts: []
+          inventory: []
         });
-        this.notify('UNIT DEPLOYED');
+        this.notify('Device Added to Fleet');
+      },
+      deleteMachine() {
+        if(confirm('Delete this machine permanently?')) {
+          this.machines = this.machines.filter(m => m !== this.activeMachine);
+          this.activeMachine = null;
+          this.notify('Device Deleted');
+        }
       },
       openMachine(m) { this.activeMachine = m; },
-      closeMachine() { this.activeMachine = null; },
-      deleteMachine() {
-        if(confirm("DECOMMISSION THIS UNIT? DATA WILL BE LOST.")) {
-          this.machines = this.machines.filter(m => m !== this.activeMachine);
-          this.closeMachine();
-          this.notify('UNIT DECOMMISSIONED');
-        }
-      },
 
-      // Product Logic
-      addGlobalProduct() {
-        if(this.newProdName && this.newProdBuy && this.newProdSell) {
-          this.globalProducts.push({
-            name: this.newProdName,
-            buyPrice: this.newProdBuy,
-            sellPrice: this.newProdSell
+      // Product Ops
+      addToCatalog() {
+        if(this.newProd.name && this.newProd.buy) {
+          this.globalCatalog.push({
+            name: this.newProd.name,
+            image: this.newProd.image,
+            buyPrice: this.newProd.buy,
+            sellPrice: this.newProd.sell || (this.newProd.buy * 2)
           });
-          this.newProdName = ''; this.newProdBuy = null; this.newProdSell = null;
-          this.notify('CATALOG UPDATED');
+          this.newProd = { name: '', image: '', buy: null, sell: null };
+          this.notify('Catalog Updated');
         }
       },
-      removeGlobalProduct(idx) { this.globalProducts.splice(idx, 1); },
-
-      addProductToMachine() {
-        if(this.selectedGlobalProduct) {
+      addProductSlot() {
+        if(this.selectedProduct) {
+          // Clone product data into machine inventory
           this.activeMachine.inventory.push({
-            name: this.selectedGlobalProduct.name,
-            stock: 50, // Default full
-            sold: 0,
-            sellPrice: this.selectedGlobalProduct.sellPrice // Inherit default but editable
+            name: this.selectedProduct.name,
+            image: this.selectedProduct.image,
+            buyPrice: this.selectedProduct.buyPrice,
+            sellPrice: this.selectedProduct.sellPrice,
+            stock: 50,
+            sold: 0
           });
-          this.selectedGlobalProduct = null;
-          this.notify('SLOT ADDED');
+          this.selectedProduct = null;
+          this.notify('Product Slot Added');
         }
       },
-      removeSlot(idx) { this.activeMachine.inventory.splice(idx, 1); },
+      removeSlot(idx) {
+        this.activeMachine.inventory.splice(idx, 1);
+      },
 
-      // Financials
-      addCost() {
-        if(this.tempRestockCost) {
-          if(!this.activeMachine.manualCosts) this.activeMachine.manualCosts = [];
-          this.activeMachine.manualCosts.push(this.tempRestockCost);
-          this.tempRestockCost = null;
-          this.notify('COST RECORDED');
-        }
-      },
+      // CALCULATION LOGIC
       getMachineRevenue(m) {
         if(!m.inventory) return "0.00";
         return m.inventory.reduce((acc, item) => acc + (item.sold * item.sellPrice), 0).toFixed(2);
       },
       getMachineCost(m) {
-        // Sum of all manual restock costs entered
-        if(!m.manualCosts) return "0.00";
-        return m.manualCosts.reduce((acc, cost) => acc + cost, 0).toFixed(2);
+        // AUTO CALC: Cost = Sold Qty * Buy Price
+        if(!m.inventory) return "0.00";
+        return m.inventory.reduce((acc, item) => acc + (item.sold * item.buyPrice), 0).toFixed(2);
       },
       getMachineProfit(m) {
         return (this.getMachineRevenue(m) - this.getMachineCost(m)).toFixed(2);
@@ -528,16 +500,14 @@
         const ctx = document.getElementById('mainChart');
         if(ctx) {
           new Chart(ctx, {
-            type: 'line',
+            type: 'bar',
             data: {
               labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
               datasets: [{
-                label: 'Revenue',
-                data: [1200, 1900, 3000, 5000, 4200, 6000],
-                borderColor: '#00f2ff',
-                backgroundColor: 'rgba(0, 242, 255, 0.1)',
-                fill: true,
-                tension: 0.4
+                label: 'Net Profit',
+                data: [1200, 1900, 3000, 2500, 4200, 3800],
+                backgroundColor: '#30d158',
+                borderRadius: 6
               }]
             },
             options: {
@@ -545,8 +515,8 @@
               maintainAspectRatio: false,
               plugins: { legend: { display: false } },
               scales: {
-                x: { grid: { color: '#222' } },
-                y: { grid: { color: '#222' } }
+                x: { grid: { display: false }, ticks: { color: '#888' } },
+                y: { grid: { color: '#333' }, ticks: { color: '#888' } }
               }
             }
           });
